@@ -6,8 +6,12 @@ node_js:
 before_install:
   - 'sudo apt-get install jq'
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken')
-  - 'curl -H "Authorization: $staging_token" https://staging-mb-api-domains.milkbox.systems/get-terraform-domains > sites-staging.json'
-  - 'curl -H "Authorization: $staging_token" https://staging-mb-api-domains.milkbox.systems/get-terraform-domain-records > records-staging.json'
+  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging.json'
+  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging.json'
+
+  - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken')
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains > sites-production.json'
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records > records-production.json'
 
 jobs:
   include:
@@ -17,3 +21,5 @@ jobs:
         - echo $staging_token
         - cat sites-staging.json | jq '.'
         - cat records-staging.json | jq '.'
+        - cat sites-production.json | jq '.'
+        - cat records-production.json | jq '.'
