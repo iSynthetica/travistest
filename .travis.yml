@@ -10,6 +10,6 @@ before_install:
 jobs:
   include:
     - stage: terraform plan
-      if: type = push AND branch = master
+      if: type = push AND branch = main
       script:
         - echo $staging_token
