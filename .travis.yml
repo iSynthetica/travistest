@@ -6,7 +6,7 @@ node_js:
 before_install:
   - 'sudo apt-get install jq'
   - staging_token=$(curl -X POST -d "{\"username\":\"milk_portal\",\"password\":\"milk_portal@1234569\"}" https://staging-mb-api-domains.milkbox.systems/auth | jq '.accessToken')
-  - 'echo curl -H "Authorization: $staging_token" https://staging-mb-api-domains.milkbox.systems/get-terraform-domains'
+  - 'curl -H "Authorization: $staging_token" https://staging-mb-api-domains.milkbox.systems/get-terraform-domains > sites.json'
 
 jobs:
   include:
@@ -14,3 +14,4 @@ jobs:
       if: type = push AND branch = main
       script:
         - echo $staging_token
+        - cat sites.json | jq '.'
