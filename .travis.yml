@@ -1,0 +1,15 @@
+dist: xenial # Ubuntu 16.04
+language: node_js
+node_js:
+  - 10
+
+before_install:
+  - 'sudo apt-get install jq'
+  - staging_token=$(curl -X POST -d "{\"username\":\"milk_portal\",\"password\":\"milk_portal@1234569\"}" https://staging-mb-api-domains.milkbox.systems/auth | jq '.accessToken')
+
+jobs:
+  include:
+    - stage: terraform plan
+      if: type = push AND branch = master
+      script:
+        - echo $staging_token
