@@ -11,8 +11,8 @@ before_install:
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records1 > records-staging.json'
 
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records1 > records-production.json'
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains > sites-production.json'
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records > records-production.json'
 
 jobs:
   include:
