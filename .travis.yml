@@ -21,8 +21,8 @@ before_install:
   - cat records-production.json | jq '.code'
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
-  - cat sites-production.json | jq '.code !== null'
-  - cat records-production.json | jq '.code !== null'
+  - cat sites-production.json | jq '.code != null'
+  - cat records-production.json | jq '.code != null'
 
   - travis_terminate 1
 jobs:
