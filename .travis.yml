@@ -23,7 +23,13 @@ before_install:
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
 
-  - cat sites-production.json | jq '.code == null' || travis_terminate 1
+  - result=$(cat sites-production.json | jq '.code == null')
+  - >
+    if [ result ]
+    then
+      echo Hey that\'s a large number.
+      pwd
+    fi
   - cat records-production.json | jq '.code == null' || travis_terminate 1
 
 jobs:
