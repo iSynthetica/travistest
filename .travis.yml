@@ -10,20 +10,20 @@ before_install:
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging.json'
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging.json'
 
-  - req_result=$(cat sites-staging.json | jq ' if .code != null then "error" else "success" end' | tr "\n" "")
+  - req_result=$(cat sites-staging.json | jq ' if .code != null then "error" else "success" end' | tr '\n' '')
   - echo $req_result
 
-  - req_result=$(cat records-staging.json | jq ' if .code != null then "error" else "success" end' | tr "\n" "")
+  - req_result=$(cat records-staging.json | jq ' if .code != null then "error" else "success" end' | tr '\n' '')
   - echo $req_result
 
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
   - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
   - 'curl -H "Authorization: $production_token" $domain_api_url_production/domains/bf3740c2-6980-4e52-9d32-cb1a5bfb6d14no > records-production.json'
 
-  - req_result=$(cat sites-production.json | jq ' if .code != null then "error" else "success" end' | tr "\n" "")
+  - req_result=$(cat sites-production.json | jq ' if .code != null then "error" else "success" end' | tr '\n' '')
   - echo $req_result
 
-  - req_result=$(cat records-production.json | jq ' if .code != null then "error" else "success" end' | tr "\n" "")
+  - req_result=$(cat records-production.json | jq ' if .code != null then "error" else "success" end' | tr '\n' '')
   - echo $req_result
   
   - |
