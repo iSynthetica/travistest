@@ -18,6 +18,7 @@ before_install:
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
 
+  - travis_terminate 1
 jobs:
   include:
     - stage: terraform plan
