@@ -24,6 +24,7 @@ before_install:
   - cat records-production.json | jq '.code'
 
   - result=$(cat sites-production.json | jq '.code != null')
+  - echo $result
   - |
     if [ "$result" == "true" ]; then
       travis_terminate 1
