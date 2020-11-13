@@ -7,14 +7,14 @@ before_install:
   - 'sudo apt-get install jq'
 
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
-  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains1 > sites-staging.json'
-  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records1 > records-staging.json'
+  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging.json'
+  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging.json'
   - cat sites-staging.json | jq '.code'
   - cat records-staging.json | jq '.code'
 
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains > sites-production.json'
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records > records-production.json'
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records1 > records-production.json'
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
 
