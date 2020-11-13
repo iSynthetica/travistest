@@ -11,20 +11,19 @@ before_install:
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging.json'
   - cat sites-staging.json | jq '.code'
   - cat records-staging.json | jq '.code'
-  - cat sites-staging.json | jq '.code != null'
-  - cat records-staging.json | jq '.code != null'
+  - cat sites-staging.json | jq '.code == null'
+  - cat records-staging.json | jq '.code == null'
 
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
   - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records1 > records-production.json'
+  - 'curl -H "Authorization: $production_token" 12$domain_api_url_production/get-terraform-domain-records > records-production.json'
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
-  - cat sites-production.json | jq '.code != null'
-  - cat records-production.json | jq '.code != null'
+  - cat sites-production.json | jq '.code == null'
+  - cat records-production.json | jq '.code == null'
 
-  - travis_terminate 1
 jobs:
   include:
     - stage: terraform plan
