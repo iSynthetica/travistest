@@ -10,7 +10,7 @@ before_install:
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging.json'
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging.json'
 
-  - req_result=$(cat sites-staging.json | jq '.code')
+  - req_result=$(cat sites-staging.json | jq ' if .code != null then "error" else "success" end')
   - echo $req_result
 
   - req_result=$(cat records-staging.json | jq '.code')
