@@ -16,7 +16,7 @@ before_install:
 
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
   - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
-  - 'curl -H "Authorization: $production_token" 12$domain_api_url_production/get-terraform-domain-records > records-production.json'
+  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domain-records2 > records-production.json'
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
   - cat sites-production.json | jq '.code'
