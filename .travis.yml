@@ -12,8 +12,8 @@ before_install:
   - cat sites-staging.json | jq '.code'
   - cat records-staging.json | jq '.code'
 
-  - sites-staging.json | jq '.code == null'
-  - records-staging.json | jq '.code == null'
+  - cat sites-staging.json | jq '.code == null' || travis_terminate 1
+  - cat records-staging.json | jq '.code == null' || travis_terminate 1
 
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
   - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
@@ -23,8 +23,8 @@ before_install:
   - cat sites-production.json | jq '.code'
   - cat records-production.json | jq '.code'
 
-  - sites-production.json | jq '.code == null'
-  - records-production.json | jq '.code == null'
+  - cat sites-production.json | jq '.code == null' || travis_terminate 1
+  - cat records-production.json | jq '.code == null' || travis_terminate 1
 
 jobs:
   include:
