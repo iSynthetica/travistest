@@ -28,9 +28,9 @@ before_install:
   
   - |
     if [ "$req_result" = "error" ]; then
-      travis_terminate 1
-    else
       echo $req_result
+    else
+      travis_terminate 1
     fi
 
 after_success:
