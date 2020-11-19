@@ -34,7 +34,7 @@ before_install:
     fi
 
 after_success:
-  - sites_staging=$(cat sites-staging.json | jq '.')
+  - sites_staging=$(cat sites-staging.json | jq -Rs  '.')
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
   - 'curl -X POST -d "{\"domains\":$sites_staging}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
 
