@@ -33,6 +33,10 @@ before_install:
       echo $req_result
     fi
 
+after_success:
+  - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
+  - 'curl -X POST -d @sites-staging.json  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+
 jobs:
   include:
     - stage: terraform plan
