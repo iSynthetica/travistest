@@ -36,7 +36,12 @@ before_install:
 after_success:
   - sites_staging=$(jq -Rs  '.' sites-staging.json)
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
-  - 'curl -X POST -d "{\"domains\":$sites_staging}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+  - 'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+
+after_failure:
+  - sites_staging=$(jq -Rs  '.' sites-staging.json)
+  - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
+  - 'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
 
 jobs:
   include:
