@@ -6,7 +6,7 @@ node_js:
 before_install:
   - 'sudo apt-get install jq'
 
-  - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
+  - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging3\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
   - '[[ "$staging_token" = "null" ]] && echo "Empty" || echo $staging_token'
   - |
     if [[ "$staging_token" = "null" ]]; then
@@ -15,7 +15,7 @@ before_install:
       echo $staging_token
     fi
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging.json'
-  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging13/get-terraform-domain-records > records-staging.json'
+  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging.json'
 
   - req_result=$(cat sites-staging.json | jq ' if .code != null then "error" else "success" end')
   - echo $req_result
