@@ -1,0 +1,12 @@
+export domain_api_password_staging=milk_portal@1234569
+export domain_api_url_staging=https://development-mb-api-domains.milkbox.dev
+export domain_api_username_staging=milk_portal
+
+curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging5\"}" $domain_api_url_staging/auth > staging_token.json
+
+staging_token=$(cat staging_token.json | jq 'try .accessToken catch ". is not an object"' | tr -d '"' || echo "no token")
+
+echo $staging_token
+
+
+'curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"''
