@@ -31,7 +31,7 @@ before_install:
   - cat sites-staging.json | jq '.'
   - cat records-staging.json | jq '.'
 
-  - travis_terminate 0
+  # - travis_terminate 0
 
   # Get Production Token
   # - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
