@@ -1,12 +1,37 @@
-export domain_api_password_staging=milk_portal@1234569
-export domain_api_url_staging=https://development-mb-api-domains.milkbox.dev
-export domain_api_username_staging=milk_portal
+export domain_api_password_staging=milk_portal@1234569 && export domain_api_url_staging=https://development-mb-api-domains.milkbox.dev && export domain_api_username_staging=milk_portal
+staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
+if [[ "$staging_token" = "null" ]]; then
+    travis_terminate 1
+else
+    echo $staging_token
+fi
 
-curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging5\"}" $domain_api_url_staging/auth > staging_token.json
+curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging-response.json
+curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json
 
-staging_token=$(cat staging_token.json | jq 'try .accessToken catch ". is not an object"' | tr -d '"' || echo "no token")
+sites_staging=$(cat sites-staging-response.json | jq '.domains')
+if [[ "$sites_staging" = "null" ]]; then
+    travis_terminate 1
+else
+    echo $sites_staging > sites-staging.json
+fi
+
+
+
+
+curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth > staging_token.json
+staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging5\"}" $domain_api_url_staging/auth)
 
 echo $staging_token
+
+staging_token=$(cat staging_token.json | jq 'try .accessToken catch ". is not an object"' | tr -d '"')
+staging_token=$(cat staging_token.json | jq '.accessToken' | tr -d '"')
+
+jq 'try .accessToken catch ". is not an object"' staging_token.json
+
+echo $staging_token
+
+[[ "$staging_token" = "null" ]] && echo "Empty" || echo $staging_token
 
 
 'curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"''
