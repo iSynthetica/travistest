@@ -1,0 +1,62 @@
+{
+  "funnel.naturaldiaper.net": {
+    "domain_name": "naturaldiaper.net",
+    "sub_domain": "funnel",
+    "alias": "funnel.naturaldiaper.net",
+    "type": "CNAME"
+  },
+  "funnel.milkboxsites.com": {
+    "domain_name": "milkboxsites.com",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkboxsites.com",
+    "type": "CNAME"
+  },
+  "funnel.milkbox.com": {
+    "domain_name": "milkbox.com",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkbox.com",
+    "type": "CNAME"
+  },
+  "funnel.milkbox.dev": {
+    "domain_name": "milkbox.dev",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkbox.dev",
+    "type": "CNAME"
+  },
+  "funnel.milkbox.systems": {
+    "domain_name": "milkbox.systems",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkbox.systems",
+    "type": "CNAME"
+  },
+  "funnel.milkboxexperiment.com": {
+    "domain_name": "milkboxexperiment.com",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkboxexperiment.com",
+    "type": "CNAME"
+  },
+  "funnel.milkboxsitebuilder.com": {
+    "domain_name": "milkboxsitebuilder.com",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkboxsitebuilder.com",
+    "type": "CNAME"
+  },
+  "f.milkbox-vlad.com": {
+    "domain_name": "milkbox-vlad.com",
+    "sub_domain": "f",
+    "alias": "f.milkbox-vlad.com",
+    "type": "CNAME"
+  },
+  "funnel.milkbox-vlad.com": {
+    "domain_name": "milkbox-vlad.com",
+    "sub_domain": "funnel",
+    "alias": "funnel.milkbox-vlad.com",
+    "type": "CNAME"
+  },
+  "funnel.raisegame.com": {
+    "domain_name": "raisegame.com",
+    "sub_domain": "funnel",
+    "alias": "funnel.raisegame.com",
+    "type": "CNAME"
+  }
+}

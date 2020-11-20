@@ -33,41 +33,37 @@ before_install:
 
   - travis_terminate 0
 
-  # Get Staging Records
-  # - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json'
-  # - records_staging=$(cat records-staging-response.json | jq '.records')
-  - records_staging=$(cat sites-staging-response.json | jq '.records')
-  - |
-    if [[ "$records_staging" = "null" ]]; then
-      echo "No staging records"
-      travis_terminate 1
-    else
-      echo $records_staging > records-staging.json
-    fi
-  - cat records-staging.json | jq '.'
-
   # Get Production Token
-  - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
-  - |
-    if [[ "$production_token" = "null" ]]; then
-      echo "No production token"
-      travis_terminate 1
-    else
-      echo $production_token
-    fi
+  # - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
+  # - |
+  #   if [[ "$production_token" = "null" ]]; then
+  #     echo "No production token"
+  #     travis_terminate 1
+  #   else
+  #     echo $production_token
+  #   fi
 
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
-  - 'curl -H "Authorization: $production_token" $domain_api_url_production/domains/bf3740c2-6980-4e52-9d32-cb1a5bfb6d14no > records-production.json'
+  # - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
+  # - 'curl -H "Authorization: $production_token" $domain_api_url_production/domains/bf3740c2-6980-4e52-9d32-cb1a5bfb6d14no > records-production.json'
 
 after_success:
-  - sites_staging=$(jq -Rs  '.' sites-staging.json)
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
-  - 'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+  - |
+    if [[ "$staging_token" = "null" ]]; then
+      echo "No staging token"
+    else
+      'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+    fi
 
 after_failure:
-  - sites_staging=$(jq -Rs  '.' sites-staging.json)
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
-  - 'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+  - |
+    if [[ "$staging_token" = "null" ]]; then
+      echo "No staging token"
+    else
+      'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+      echo $staging_token
+    fi
 
 jobs:
   include:
