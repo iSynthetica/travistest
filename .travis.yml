@@ -14,6 +14,7 @@ before_install:
     else
       echo $staging_token
     fi
+    
   # Get Staging Domains
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging-response.json'
   - sites_staging=$(cat sites-staging-response.json | jq '.domains')
