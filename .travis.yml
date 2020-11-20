@@ -52,7 +52,7 @@ after_success:
     if [[ "$staging_token" = "null" ]]; then
       echo "No staging token"
     else
-      'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+      curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook
     fi
 
 after_failure:
@@ -61,7 +61,7 @@ after_failure:
     if [[ "$staging_token" = "null" ]]; then
       echo "No staging token"
     else
-      'curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook'
+      curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\"}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook
       echo $staging_token
     fi
 
