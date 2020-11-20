@@ -6,6 +6,7 @@ node_js:
 before_install:
   - 'sudo apt-get install jq'
 
+  # Get Staging Token
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
   - |
     if [[ "$staging_token" = "null" ]]; then
@@ -13,19 +14,37 @@ before_install:
     else
       echo $staging_token
     fi
+  # Get Staging Domains
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging-response.json'
   - sites_staging=$(cat sites-staging-response.json | jq '.domains')
-  - echo $sites_staging
-  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json'
-  - records_staging=$(cat sites-staging-response.json | jq '.domains')
-  - echo $records_staging
+  - |
+    if [[ "$sites_staging" = "null" ]]; then
+      echo "No domains"
+      travis_terminate 1
+    else
+      echo $sites_staging > sites-staging.json
+    fi
+  - cat sites-staging.json | jq '.'
 
+  # Get Staging Records
+  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json'
+  - records_staging=$(cat records-staging-response.json | jq '.records')
+  - |
+    if [[ "$records_staging" = "null" ]]; then
+      echo "No records"
+      travis_terminate 1
+    else
+      echo $records_staging > records-staging.json
+    fi
+  - cat records-staging.json | jq '.'
+
+  # Get Production Token
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
   - |
     if [[ "$production_token" = "null" ]]; then
       travis_terminate 1
     else
-      echo $staging_token
+      echo $production_token
     fi
 
   - 'curl -H "Authorization: $production_token" $domain_api_url_production/get-terraform-domains1 > sites-production.json'
@@ -46,8 +65,6 @@ jobs:
     - stage: terraform plan
       if: type = push AND branch = main
       script:
-        - echo $staging_token
-        - echo $production_token
         - cat sites-staging.json | jq '.'
         - cat records-staging.json | jq '.'
         - cat sites-production.json | jq '.'
