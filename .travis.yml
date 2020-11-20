@@ -27,8 +27,9 @@ before_install:
   - cat sites-staging.json | jq '.'
 
   # Get Staging Records
-  - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json'
-  - records_staging=$(cat records-staging-response.json | jq '.records')
+  # - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json'
+  # - records_staging=$(cat records-staging-response.json | jq '.records')
+  - records_staging=$(cat sites-staging-response.json | jq '.records')
   - |
     if [[ "$records_staging" = "null" ]]; then
       echo "No records"
