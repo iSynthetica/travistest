@@ -10,7 +10,7 @@ before_install:
   - '[[ "$staging_token" = "null" ]] && echo "Empty" || echo $staging_token'
   - |
     if [[ "$staging_token" = "null" ]]; then
-      echo "Empty"
+      travis_terminate 1
     else
       echo $staging_token
     fi
