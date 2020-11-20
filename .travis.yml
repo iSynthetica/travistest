@@ -10,22 +10,28 @@ before_install:
   - staging_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_staging\",\"password\":\"$domain_api_password_staging\"}" $domain_api_url_staging/auth | jq '.accessToken' | tr -d '"')
   - |
     if [[ "$staging_token" = "null" ]]; then
+      echo "No staging token"
       travis_terminate 1
     else
       echo $staging_token
     fi
-    
+
   # Get Staging Domains
   - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domains > sites-staging-response.json'
   - sites_staging=$(cat sites-staging-response.json | jq '.domains')
+  - records_staging=$(cat sites-staging-response.json | jq '.records')
   - |
-    if [[ "$sites_staging" = "null" ]]; then
-      echo "No domains"
-      travis_terminate 1
-    else
+    if [[ "$sites_staging" != "null" && "$records_staging" != "null" ]]; then
       echo $sites_staging > sites-staging.json
+      echo $records_staging > records-staging.json
+    else
+      echo "No staging domains"
+      travis_terminate 1
     fi
   - cat sites-staging.json | jq '.'
+  - cat records-staging.json | jq '.'
+
+  - travis_terminate 0
 
   # Get Staging Records
   # - 'curl -H "Authorization: $staging_token" $domain_api_url_staging/get-terraform-domain-records > records-staging-response.json'
@@ -33,7 +39,7 @@ before_install:
   - records_staging=$(cat sites-staging-response.json | jq '.records')
   - |
     if [[ "$records_staging" = "null" ]]; then
-      echo "No records"
+      echo "No staging records"
       travis_terminate 1
     else
       echo $records_staging > records-staging.json
@@ -44,6 +50,7 @@ before_install:
   - production_token=$(curl -X POST -d "{\"username\":\"$domain_api_username_production\",\"password\":\"$domain_api_password_production\"}" $domain_api_url_production/auth | jq '.accessToken' | tr -d '"')
   - |
     if [[ "$production_token" = "null" ]]; then
+      echo "No production token"
       travis_terminate 1
     else
       echo $production_token
