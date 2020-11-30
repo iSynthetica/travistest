@@ -53,7 +53,7 @@ after_success:
       echo "No staging token"
     else
       sites_staging=$(jq -c  '.' sites-staging.json)
-      curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"},\"branch\":$TRAVIS_BRANCH}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook
+      curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"success\"},\"branch\":$TRAVIS_BRANCH,\"tag\":$TRAVIS_TAG}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook
     fi
 
 after_failure:
@@ -63,7 +63,7 @@ after_failure:
       echo "No staging token"
     else
       sites_staging=$(jq -c  '.' sites-staging.json)
-      curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\",\"branch\":$TRAVIS_BRANCH}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook
+      curl -X POST -d "{\"domains\":$sites_staging,\"status\":\"failure\",\"branch\":$TRAVIS_BRANCH,\"tag\":$TRAVIS_TAG}"  -H "Authorization: $staging_token" $domain_api_url_staging/travis-webhook
       echo $staging_token
     fi
 
