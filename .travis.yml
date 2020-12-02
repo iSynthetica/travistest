@@ -77,6 +77,14 @@ jobs:
         - cat sites-production.json | jq '.'
         - cat records-production.json | jq '.'
 
+    - stage: terraform apply staging
+      if: type = push AND tag =~ ^staging-tag-.*$
+      script:
+        - cat sites-staging.json | jq '.'
+        - cat records-staging.json | jq '.'
+        - cat sites-production.json | jq '.'
+        - cat records-production.json | jq '.'
+
     - stage: terraform apply
       if: type = push AND tag =~ ^tag-.*$
       script:
