@@ -72,6 +72,7 @@ jobs:
     - stage: terraform plan
       if: type = push AND branch = main
       script:
+        - node index.js
         - cat sites-staging.json | jq '.'
         - cat records-staging.json | jq '.'
         - cat sites-production.json | jq '.'
@@ -80,6 +81,7 @@ jobs:
     - stage: terraform apply staging
       if: type = push AND tag =~ ^staging-tag-.*$
       script:
+        - node index.js
         - cat sites-staging.json | jq '.'
         - cat records-staging.json | jq '.'
         - cat sites-production.json | jq '.'
@@ -88,6 +90,7 @@ jobs:
     - stage: terraform apply
       if: type = push AND tag =~ ^tag-.*$
       script:
+        - node index.js
         - cat sites-staging.json | jq '.'
         - cat records-staging.json | jq '.'
         - cat sites-production.json | jq '.'
